@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;700&display=swap');
+*, *::after, *::before{
+    /* margin: 0;
+    padding: 0; */
+    box-sizing: border-box;
+}
+body, h1, h2, h3, figure, p{ margin: 0; padding: 0;}
+body{ 
+    background-color:ivory;
+    font-family: 'Teko', sans-serif;
+}
+html{ font-size: 18px;}
+/* Deixando a imagem e iframe responsivos */
+img {max-width: 100%;}
+iframe {width: 100%; border: none;}
+
+.historia iframe{
+    max-width: 900px;
+}
+/* --------- */
+a{
+    text-decoration: none;
+}
+h1, nav{
+    text-transform: uppercase;
+}
+h1 {
+    font-weight: 700;
+    font-size: 2rem;
+}
+h1 a{
+    padding: 2px 5px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+}
+header{
+    background-color: white;
+    /* Sticky permite o conteudo do cabecalho ficar fixo enquanto o resto do conteudo eh rolado */
+    position: sticky;
+    top: 0; right: 0; left: 0;
+}
+header .limitador{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.limitador{
+    max-width: 1200px;
+    width: 95vw;
+    margin: auto;
+}
+nav{
+    width: 60%;
+}
+nav h2 { text-align: right;}
+/* Icone de menu no nav */
+.icone{
+    color: black;
+    font-size: 1.5rem;
+    padding: 1.3rem;
+    display: inline-block;
+}
+/* Formatando o conteudo da lista do nav */
+.menu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Escondendo a lista  */
+    display: none;
+}
+.menu a {
+    background-color: white;
+    color: black;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    align-items: center;
+}
+.menu a:hover, .menu a:focus{
+    background-color: gainsboro;
+}
+
+/* Classe para abrir o menu - manipulada via JS */
+.abrir-menu{
+    display: block;
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+/* ---------------------------------------------------------- */
+.destaque{
+    background-image: url(../imagens/fundo-destaque.jpg);
+    height: 70vh;
+    color: white;
+    /* Deixar o fundo preso ao bloco. Efeito de parado quando voce rola a pagina */
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+    /* Solucao 2 --- wrap faz o conteudo descer e o align content tira os espacos entre os dois elementos--------
+
+    flex-wrap: wrap;
+    align-content: center; */
+}
+.destaque h2{
+    font-weight: bold;
+    font-size: clamp(10vw, 3rem, 15vw);
+    animation: fadeIn;
+    animation-duration: 2s;
+
+}
+.destaque p{ 
+    font-size: clamp(5vw, 7vw, 10vw);
+    /* animation-delay: 4s; DELAY PARA FAZER A ANIMACAO */
+    /* animation-fill-mode: ; FAZER COM QUE O ELEMENTO COMECA OCULTO DEPOIS APARECA */
+    animation:fadeIn 3s 1s backwards;
+}
+
+@keyframes fadeIn {
+    from    {opacity: 0;}
+    to  { opacity: 1;}
+}
+
+article h2{
+    text-align: center;
+    padding:1rem 1rem 0 1rem;
+}
+article p {
+    padding: 0.5rem 0;
+    /* text-align: center; */
+}
+figure{
+    text-align: center;
+    margin: 1rem 0;
+}
+.historia iframe{max-width: 800px;}
+.historia{
+    background-image: url(../imagens/fundo-madeira.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+
+.historia h2{
+    color: white;
+    text-shadow: black 1px 1px 2px;
+}
+.front-end, .localizacao{text-align: center;}
+.localizacao{
+    margin: .5rem;
+}
+
+/* Footer */
+footer{
+    padding: 1rem;
+    /* height: 15vh; */
+    color: white;
+    background-color:black;
+    font-weight: 700;
+    text-align: center;
+}
+/* --------------------------------------------------------------------- */
+/* PAGINA DE PRODUTOS */
+
+/* .conteudo-produtos{
+    background-color: whitesmoke;
+    padding: .7rem;
+    border-radius: 7px;
+} */
+
+table, th, td{
+    border: 2px solid black;
+    /* Bordas colapsada */
+    border-collapse: collapse;
+}
+table{
+    margin: auto;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+}
+table th{
+    background-color: black;
+    color: white;
+}
+table td{
+    background-color: white;
+}
+th,td{
+    width: 33%;
+    padding: .5rem;
+}
+table caption{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+/* Escolhendo o filho do td com nth */
+/* td:nth-child(2){
+    color: #f0f;
+} */
+
+td:last-child{
+    color: blue;
+}
+/* td:first-child{
+    text-transform: uppercase;
+} */
+
+/* ------------------- */
+/* Pagina de formularios */
+form{
+    max-width: 500px;
+    width: 95%;
+    margin: auto;
+    /* background-color: whitesmoke; */
+    padding: 1rem;
+    /* border-radius: 10px; */
+}
+/* Seletor NOT */
+input:not([type=radio]):not([type=checkbox]), select, textarea{
+    width: 100%;
+    height: 40px;
+    border: none;
+    padding: 2%;
+    border-radius: 20px;
+    box-shadow: black 0 0 3px inset;
+}
+textarea{
+    height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Media Queries */
+@media screen and (min-width:590px) {
+    .icone{
+        display: none;
+    }
+    .menu{
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+    }
+    .menu a{
+        padding: .5rem;
+    }
+}
+@media screen and (min-width:800px) {
+    html{
+        font-size: 22px;
+    }
+    header .limitador{
+        height: 15vh;
+    }
+    .destaque{
+        height: 85vh;
+    }
+}
+@media screen and (max-width:425px) {
+    .conteudo figure {
+        display: flex;
+    }
+}
