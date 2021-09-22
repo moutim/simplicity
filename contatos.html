@@ -54,7 +54,7 @@
             <p>Incidunt illum, voluptatem reprehenderit quibusdam minus temporibus rem fugiat odit earum ipsum ratione excepturi quasi fugit suscipit libero, recusandae repellat culpa. Aspernatur natus omnis ad aperiam magnam suscipit, praesentium quasi.</p>
 
             <!-- Formulario -->
-            <form action="" method="POST">
+            <form id="my-form" action="https://formspree.io/f/xpzkbbpq" method="POST">
                 <div>
                     <label for="nome">Nome:</label>
                     <input type="text" name="nome" id="nome" placeholder="Nome completo">
@@ -71,8 +71,13 @@
                 </div>
 
                 <div>
-                    <label for="telefone">Telefone:</label>
+                    <label for="telefone">Celular ou telefone:</label>
                     <input type="tel" name="telefone" id="telefone" placeholder="Numero com DDD">
+                </div>
+
+                <div>
+                    <label for="doc">CPF ou CNPJ:</label>
+                    <input type="tel" name="doc" id="doc" placeholder="Digite o numero sem tracos ou pontos">
                 </div>
 
                 <div>
@@ -108,8 +113,7 @@
 
                 <div>
                     <label for="cep">CEP:</label>
-                    <input type="number" name="cep" id="cep" maxlength="9" required>
-                    <button id="localizar-cep">Localizar</button>
+                    <input type="text" name="cep" id="cep" maxlength="10" required>
                     <b id="status"></b>
                 </div>
 
@@ -156,14 +160,14 @@
 
                 <div>
                     <label for="mensagem">Mensagem:
-                        <span id="maximo">(restam <b id="caracteres">100</b> caracteres)</span><br>
+                        <span id="maximo">(Restam <b id="caracteres">100</b> caracteres)</span><br>
                     </label>
                     <textarea name="mensagem" id="mensagem" cols="30" rows="10" maxlength="100"></textarea>
 
                 </div>
 
-                <button type="submit">Enviar dados</button>
-
+                <button id="my-form-button" type="submit">Enviar dados</button>
+                <p id="my-form-status"></p>
 
 
 
@@ -188,5 +192,154 @@
     </details> -->
 
     <script src="assets/js/js.js"></script>
+
+    <!-- Linkando o vanillamask -->
+    <script src="assets/plugins/vanilla-masker.min.js"></script>
+        <!-- Formatando numero de telefone com valilla mask -->
+        <script>
+            function inputHandler(masks, max, event) {
+                var c = event.target;
+                var v = c.value.replace(/\D/g, '');
+                var m = c.value.length > max ? 1 : 0;
+                VMasker(c).unMask();
+                VMasker(c).maskPattern(masks[m]);
+                c.value = VMasker.toPattern(v, masks[m]);
+                }
+
+                var telMask = ['(99) 9999-9999', '(99) 99999-9999'];
+                var tel = document.querySelector('#telefone');
+                VMasker(tel).maskPattern(telMask[0]);
+                tel.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
+
+                var telMask = ['999.999.999-999', '99.999.999/9999-99'];
+                var tel = document.querySelector('#doc');
+                VMasker(tel).maskPattern(telMask[0]);
+                tel.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
+
+                var telMask = ['99999-999'];
+                var tel = document.querySelector('#cep');
+                VMasker(tel).maskPattern(telMask[0]);
+                tel.addEventListener('input', inputHandler.bind(undefined, telMask, 14), false);
+
+        </script>
+
+    <!-- Linkando biblioteca Jquery -->
+    <script src="assets/plugins/jquery-3.6.0.min.js"></script>    
+        <!-- Script copiado diretamente do site da API: https://viacep.com.br/exemplo/jquery/  -->
+    <script>
+
+        $(document).ready(function() {
+
+            function limpa_formulário_cep() {
+                // Limpa valores do formulário de cep.
+                $("#endereco").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#estado").val("");
+            }
+            
+            //Quando o campo cep perde o foco.
+            $("#cep").blur(function() {
+
+                //Nova variável "cep" somente com dígitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != "") {
+
+                    //Expressão regular para validar o CEP.
+                    var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if(validacep.test(cep)) {
+
+                        //Preenche os campos com "..." enquanto consulta webservice.
+                        $("#endereco").val("...");
+                        $("#bairro").val("...");
+                        $("#cidade").val("...");
+                        $("#estado").val("...");
+                        $("#status").text("CEP encontrado!").css('color','green')
+
+                        //Consulta o webservice viacep.com.br/
+                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                            if (!("erro" in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $("#endereco").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#estado").val(dados.uf);
+                            } //end if.
+                            else {
+                                //CEP pesquisado não foi encontrado.
+                                limpa_formulário_cep();
+                                $("#status").text("CEP não encontrado.").css('color','red');
+                            }
+                        });
+                    } //end if.
+                    else {
+                        //cep é inválido.
+                        limpa_formulário_cep();
+                        $("#status").text("Formato de CEP inválido.").css('color','red');
+                    }
+                } //end if.
+                else {
+                    //cep sem valor, limpa formulário.
+                    limpa_formulário_cep();
+                }
+            });
+        });
+
+    </script>
+
+    <!-- Script do contador de caracteres -->
+    <script>
+        const spanMaximo = $("#maximo");
+        const bCaracteres = $("#caracteres");
+        const textMensagem = $("#mensagem")
+
+        let quantidade = 100;
+
+        textMensagem.on("input", function(){
+            let conteudo = textMensagem.val();
+
+            let contagem = quantidade - conteudo.length
+
+            bCaracteres.text(contagem)
+
+            if(contagem == 0){
+                spanMaximo.css('color', 'red')
+                spanMaximo.text(`(Limite de caracteres atingido)`)
+            }
+             else {
+                spanMaximo.html("(Restam <b id='caracteres'>" +contagem+ "</b> caracteres)")
+                spanMaximo.css('color', 'black')
+            }
+        })
+    </script>
+
+    <!-- Script do FormSpree -->
+    <script>
+        var form = document.getElementById("my-form");
+        
+        async function handleSubmit(event) {
+          event.preventDefault();
+          var status = document.getElementById("my-form-status");
+          var data = new FormData(event.target);
+          fetch(event.target.action, {
+            method: form.method,
+            body: data,
+            headers: {
+                'Accept': 'application/json'
+            }
+          }).then(response => {
+            status.innerHTML = "Sucesso! Obrigado por enviar!";
+            form.reset()
+          }).catch(error => {
+            status.innerHTML = "Ops! Houve um erro ao enviar seu formulario. Revise as informacoes e envie novamente"
+          });
+        }
+        form.addEventListener("submit", handleSubmit)
+    </script>
 </body>
 </html>

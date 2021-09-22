@@ -15,5 +15,7 @@ function abrir_fechar (event){
     }
 }
 
+
+
 // contains verifica se o conteudo tem a classe especificada
 // classList.contains()
